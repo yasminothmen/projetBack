@@ -1,27 +1,31 @@
-package Pfe_Education.mongo.Entities;
+package Pfe_Education.mongo.entities;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 
 @Data
-@Document(collection = "users") // Nom de la collection MongoDB
-public class TeacherEntity {
+public class UserEntity {
+
     @Id
     private String id; // MongoDB utilise un ObjectId (String) comme ID
-    @Size(max = 10, message = "le nom ne doit pas depasser 10 caractère")
+
+    @Size(max = 10, message = "Le prénom ne doit pas dépasser 10 caractères")
     private String firstname;
+
     private String lastname;
+
     @NotNull
     @Email(message = "Email invalide")
     private String email;
+
     @NotNull
     private String password;
+
     private String confirmPassword;
+
     @NotNull
     private String username;
-
 }
