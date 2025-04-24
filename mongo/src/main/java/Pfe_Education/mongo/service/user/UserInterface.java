@@ -1,6 +1,7 @@
 package Pfe_Education.mongo.service.user;
 
-import Pfe_Education.mongo.entities.UserEntity;
+import Pfe_Education.mongo.Entities.Teacher;
+import Pfe_Education.mongo.Entities.UserEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +15,10 @@ public interface UserInterface {
     UserEntity updateUser(String id, UserEntity user);
     List<UserEntity> getAllUsers();
     UserEntity getUser(String id);
+    List<UserEntity> getStudents();
+    List<UserEntity> getTeachers();
     Optional<UserEntity> getUserByUsername(String username);
+    Teacher addTeacher(Teacher teacher);
+    Optional<UserEntity> findByEmail(String email);
+
 }

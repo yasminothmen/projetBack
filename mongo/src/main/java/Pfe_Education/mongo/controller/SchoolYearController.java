@@ -1,6 +1,6 @@
 package Pfe_Education.mongo.controller;
 
-import Pfe_Education.mongo.entities.SchoolYear;
+import Pfe_Education.mongo.Entities.SchoolYear;
 import Pfe_Education.mongo.service.schoolyear.SchoolYearService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

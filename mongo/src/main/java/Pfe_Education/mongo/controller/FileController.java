@@ -1,7 +1,7 @@
 package Pfe_Education.mongo.controller;
 
-import Pfe_Education.mongo.entities.File;
-import Pfe_Education.mongo.service.file.local.DefaultFileServiceImplement;
+import Pfe_Education.mongo.Entities.File;
+import Pfe_Education.mongo.service.file.FileServiceImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,11 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/file")
+@CrossOrigin(origins = "*")
+
 public class FileController {
-    private final DefaultFileServiceImplement fileService;
+    private final FileServiceImplement fileService;
 
     @Autowired
-    public FileController(DefaultFileServiceImplement fileService) {
+    public FileController(FileServiceImplement fileService) {
         this.fileService = fileService;
     }
 

@@ -1,6 +1,6 @@
 package Pfe_Education.mongo.service.subject;
 
-import Pfe_Education.mongo.entities.Subject;
+import Pfe_Education.mongo.Entities.Subject;
 import java.util.List;
 
 public interface SubjectService {

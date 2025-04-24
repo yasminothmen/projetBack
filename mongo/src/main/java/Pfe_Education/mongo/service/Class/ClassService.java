@@ -1,6 +1,6 @@
 package Pfe_Education.mongo.service.Class;
 
-import Pfe_Education.mongo.entities.ClassEntity;
+import Pfe_Education.mongo.Entities.ClassEntity;
 import java.util.List;
 
 public interface ClassService {

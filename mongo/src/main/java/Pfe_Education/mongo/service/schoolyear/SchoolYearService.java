@@ -1,6 +1,6 @@
 package Pfe_Education.mongo.service.schoolyear;
 
-import Pfe_Education.mongo.entities.SchoolYear;
+import Pfe_Education.mongo.Entities.SchoolYear;
 import java.util.List;
 import java.util.Optional;
 

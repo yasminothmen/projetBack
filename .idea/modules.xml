@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/mongo.iml" filepath="$PROJECT_DIR$/.idea/mongo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SpringCrud.iml" filepath="$PROJECT_DIR$/.idea/SpringCrud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mongo/mongo.iml" filepath="$PROJECT_DIR$/mongo/mongo.iml" />
     </modules>
   </component>
 </project>

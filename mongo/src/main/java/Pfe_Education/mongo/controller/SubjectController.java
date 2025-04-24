@@ -1,6 +1,6 @@
 package Pfe_Education.mongo.controller;
 
-import Pfe_Education.mongo.entities.Subject;
+import Pfe_Education.mongo.Entities.Subject;
 import Pfe_Education.mongo.service.subject.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/subjects")
+@CrossOrigin(origins = "*")
 public class SubjectController {
 
     @Autowired

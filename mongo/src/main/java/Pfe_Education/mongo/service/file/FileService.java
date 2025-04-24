@@ -8,6 +8,6 @@ public interface FileService {
     //File  uploadFile(MultipartFile  file);
     //Optional<File>  downloadFile(String filename);
 
-    ResponseEntity<?> uploadFile(MultipartFile  fileToBeUploaded);
+    ResponseEntity<?> uploadFile(MultipartFile fileToBeUploaded);
     ResponseEntity<?> downloadFile(String filename);
 }

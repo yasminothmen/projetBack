@@ -1,0 +1,25 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/userEntity?maxDocumentSizeMB=500
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+        # URL des clés publiques de Google utilisées pour vérifier la signature des tokens Firebase
+          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
+
+        # URL de l'émetteur (issuer) des tokens JWT, spécifique à ton projet Firebase
+        # Ici, "bloc-d6575" est l'identifiant unique de ton projet Firebase
+          issuer-uri: https://securetoken.google.com/bloc-d6575
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+server:
+  port: 8080

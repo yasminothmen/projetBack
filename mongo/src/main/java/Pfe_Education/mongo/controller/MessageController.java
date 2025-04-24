@@ -1,6 +1,6 @@
 package Pfe_Education.mongo.controller;
 
-import Pfe_Education.mongo.entities.MessageEntity;
+import Pfe_Education.mongo.Entities.MessageEntity;
 import Pfe_Education.mongo.service.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,13 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/messages")  // Définir le chemin de base pour ce contrôleur
+@RequestMapping("/api/messages")
+@CrossOrigin(origins = "*")
+
 public class MessageController {
 
     @Autowired
     private MessageService messageService;
 
-    // Endpoint pour ajouter un message
     @PostMapping
     public ResponseEntity<MessageEntity> addMessage(@RequestBody MessageEntity message) {
         MessageEntity createdMessage = messageService.addMessage(message);
@@ -31,7 +32,6 @@ public class MessageController {
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
-    // Endpoint pour obtenir un message par ID
     @GetMapping("/{id}")
     public ResponseEntity<MessageEntity> getMessageById(@PathVariable String id) {
         Optional<MessageEntity> message = messageService.getAllMessages()
@@ -41,7 +41,6 @@ public class MessageController {
         return message.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Endpoint pour supprimer un message
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable String id) {
         messageService.deleteMessage(id);

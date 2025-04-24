@@ -1,6 +1,6 @@
 package Pfe_Education.mongo.controller;
 
-import Pfe_Education.mongo.entities.ClassEntity; // Correct import for the ClassEntity
+import Pfe_Education.mongo.Entities.ClassEntity; // Correct import for the ClassEntity
 import Pfe_Education.mongo.service.Class.ClassService; // Correct import for the ClassService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/classes") // Base URL for this controller
+@RequestMapping("/api/classes")// Base URL for this controller
+@CrossOrigin(origins = "*")
 public class ClassController {
 
     @Autowired

@@ -1,7 +1,7 @@
 package Pfe_Education.mongo.controller;
 
-import Pfe_Education.mongo.entities.ChatRoomEntity;
-import Pfe_Education.mongo.service.chat.ChatRoomService;
+import Pfe_Education.mongo.Entities.ChatRoomEntity;
+import Pfe_Education.mongo.service.chatRomm.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/chatrooms") // Point d'entrée pour les chat rooms
+@CrossOrigin(origins = "*")
+
 public class ChatRoomController {
 
     @Autowired
