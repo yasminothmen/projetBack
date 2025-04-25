@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/userEntity?maxDocumentSizeMB=500
+      uri: mongodb://localhost:27017/my-databases?maxDocumentSizeMB=500
   security:
     oauth2:
       resourceserver:
