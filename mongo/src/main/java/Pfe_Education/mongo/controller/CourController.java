@@ -1,7 +1,7 @@
 package Pfe_Education.mongo.controller;
 
-import Pfe_Education.mongo.Entities.WorkshopEntity;
-import Pfe_Education.mongo.service.cour.WorkshopService;
+import Pfe_Education.mongo.Entities.Cour;
+import Pfe_Education.mongo.service.cour.CourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,43 +14,43 @@ import java.util.Optional;
 @RequestMapping("/workshops")
 @CrossOrigin(origins = "*")
 
-public class WorkshopController {
+public class CourController {
 
     @Autowired
-    private WorkshopService workshopService;
+    private CourService courService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addWorkshop(@RequestBody WorkshopEntity workshop) {
+    public ResponseEntity<?> addWorkshop(@RequestBody Cour workshop) {
         System.out.println("Received: " + workshop); // Log ici
-        WorkshopEntity savedWorkshop = workshopService.addWorkshop(workshop);
+        Cour savedWorkshop = courService.addWorkshop(workshop);
         return new ResponseEntity<>(savedWorkshop, HttpStatus.CREATED);
     }
 
 
     @GetMapping("/all")
-    public List<WorkshopEntity> getAllWorkshops() {
-        return workshopService.getAllWorkshops();
+    public List<Cour> getAllWorkshops() {
+        return courService.getAllWorkshops();
     }
 
     @GetMapping("/{id}")
-    public Optional<WorkshopEntity> getWorkshopById(@PathVariable String id) {
-        return workshopService.getWorkshopById(id);
+    public Optional<Cour> getWorkshopById(@PathVariable String id) {
+        return courService.getWorkshopById(id);
     }
 
     @PutMapping("/update/{id}")
-    public WorkshopEntity updateWorkshop(@PathVariable String id, @RequestBody WorkshopEntity workshop) {
-        return workshopService.updateWorkshop(id, workshop);
+    public Cour updateWorkshop(@PathVariable String id, @RequestBody Cour workshop) {
+        return courService.updateWorkshop(id, workshop);
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteWorkshop(@PathVariable String id) {
-        workshopService.deleteWorkshop(id);
+        courService.deleteWorkshop(id);
         return "Workshop supprimé avec succès !";
     }
 
 
     @GetMapping("/{id}/title")
     public String getWorkshopTitle(@PathVariable String id) {
-        return workshopService.getWorkshopTitleById(id);
+        return courService.getWorkshopTitleById(id);
     }
 }

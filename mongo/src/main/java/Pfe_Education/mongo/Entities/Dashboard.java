@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Document(collection = "dashboard_snapshots")
-public class DashboardSnapshot {
+public class Dashboard {
     @Id
     private String id;
     private LocalDateTime date;
@@ -16,10 +16,10 @@ public class DashboardSnapshot {
     private long totalSchedules;
 
     // Constructeurs
-    public DashboardSnapshot() {}
+    public Dashboard() {}
 
-    public DashboardSnapshot(long students, long teachers, long subjects,
-                             long classes, long schedules) {
+    public Dashboard(long students, long teachers, long subjects,
+                     long classes, long schedules) {
         this.date = LocalDateTime.now();
         this.totalStudents = students;
         this.totalTeachers = teachers;

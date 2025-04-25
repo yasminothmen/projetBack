@@ -3,13 +3,12 @@ package Pfe_Education.mongo.Entities;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
 @Data
 @Document(collection = "workshops")
-public class WorkshopEntity {
+public class Cour {
     @Id
     private String id;
     private String titre;
@@ -24,11 +23,11 @@ public class WorkshopEntity {
 
     private boolean bookmarked ;
     private String workshopDuration; // Durée totale du workshop
-    public WorkshopEntity() {}
+    public Cour() {}
 
-    public WorkshopEntity(String titre, String description, String instructor,
-                          String matiere, String classe, String imagePath,
-                          List<Lesson> lessons, Exercice exercice,String workshopDuration,boolean bookmarked ) {
+    public Cour(String titre, String description, String instructor,
+                String matiere, String classe, String imagePath,
+                List<Lesson> lessons, Exercice exercice, String workshopDuration, boolean bookmarked ) {
         this.titre = titre;
         this.description = description;
         this.instructor = instructor;
