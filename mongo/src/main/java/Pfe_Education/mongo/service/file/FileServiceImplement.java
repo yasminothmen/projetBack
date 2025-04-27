@@ -110,14 +110,15 @@ public class FileServiceImplement  implements FileService{
     }
 
     @Override
-    public ResponseEntity<?> saveImageToDatabase(MultipartFile image, String userId) {
+    public ResponseEntity<?> saveImageToDatabase(MultipartFile image, String email) {
         try {
-            // 1. Vérifier que l'utilisateur existe
-            UserEntity user = userRepo.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+            // 1. Vérifier que l'utilisateur existe via son email
+            UserEntity user = userRepo.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'email: " + email));
 
-            // 2. Générer un nom de fichier unique avec l'ID utilisateur
-            String uniqueFilename = "profile_" + userId + "_" + System.currentTimeMillis() +
+            // 2. Générer un nom de fichier unique avec l'email (nettoyé des caractères spéciaux)
+            String safeEmail = email.replaceAll("[^a-zA-Z0-9]", "_");
+            String uniqueFilename = "profile_" + safeEmail + "_" + System.currentTimeMillis() +
                     (image.getOriginalFilename() != null ?
                             "_" + image.getOriginalFilename() : "");
 
@@ -125,7 +126,7 @@ public class FileServiceImplement  implements FileService{
             if (user.getProfileImageId() != null) {
                 try {
                     fileRepository.deleteById(user.getProfileImageId());
-                    log.info("Ancienne image supprimée pour l'utilisateur {}", userId);
+                    log.info("Ancienne image supprimée pour l'utilisateur {}", email);
                 } catch (Exception e) {
                     log.warn("Échec de la suppression de l'ancienne image", e);
                 }
@@ -144,15 +145,16 @@ public class FileServiceImplement  implements FileService{
             user.setProfileImageId(savedFile.getId());
             userRepo.save(user);
 
-            log.info("Image de profil sauvegardée pour l'utilisateur {}", userId);
+            log.info("Image de profil sauvegardée pour l'utilisateur {}", email);
 
-            // 6. Retourner la réponse avec l'URL d'accès à l'image
+            // 6. Retourner la réponse
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of(
                             "message", "Image de profil enregistrée avec succès",
                             "imageId", savedFile.getId(),
                             "filename", uniqueFilename,
-                            "imageUrl", "/file/images/" + uniqueFilename
+                            "imageUrl", "/file/images/" + uniqueFilename,
+                            "userEmail", email // Ajout de l'email dans la réponse
                     ));
 
         } catch (IOException e) {
