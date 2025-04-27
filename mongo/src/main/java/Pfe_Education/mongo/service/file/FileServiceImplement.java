@@ -2,10 +2,13 @@ package Pfe_Education.mongo.service.file;
 
 import Pfe_Education.mongo.Entities.File;
 import Pfe_Education.mongo.repositories.FileRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+@Slf4j
 @Service
 public class FileServiceImplement  implements FileService{
     private final FileRepository fileRepository;
@@ -95,5 +99,59 @@ public class FileServiceImplement  implements FileService{
     }
     private boolean fileExists(String filename) {
         return fileRepository.existsByFilename(filename);
+    }
+
+    @Override
+    public ResponseEntity<?> saveImageToDatabase(MultipartFile image) {
+        try {
+            // Vérifier si l'image existe déjà
+            if (this.fileExists(image.getOriginalFilename())) {
+                return new ResponseEntity<>("Image already exists", HttpStatus.CONFLICT);
+            }
+
+            // Créer un nouvel objet File pour la base de données
+            File file = new File();
+            file.setFilename(image.getOriginalFilename());
+            file.setContentType(image.getContentType());
+            file.setSize(image.getSize());
+            file.setData(image.getBytes()); // Stockage des données binaires
+
+            // Sauvegarder dans la base de données
+            File savedFile = fileRepository.save(file);
+
+            log.info("Image sauvegardée en base de données avec le nom: {}", savedFile.getFilename());
+
+            return new ResponseEntity<>("Image saved to database with name: " + savedFile.getFilename(),
+                    HttpStatus.CREATED);
+        } catch (IOException e) {
+            log.error("Erreur lors de la sauvegarde de l'image en base de données", e);
+            return new ResponseEntity<>("Error saving image to database",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<byte[]> displayImageFromDatabase(String filename) {
+        Optional<File> fileOptional = fileRepository.findFileByFilename(filename);
+
+        if (fileOptional.isEmpty()) {
+            log.warn("Image non trouvée en base de données: {}", filename);
+            return ResponseEntity.notFound().build();
+        }
+
+        File file = fileOptional.get();
+
+        // Vérifier que c'est bien une image
+        if (!file.getContentType().startsWith("image/")) {
+            log.warn("Le fichier {} n'est pas une image (type: {})", filename, file.getContentType());
+            return ResponseEntity.badRequest().body(("Le fichier n'est pas une image").getBytes());
+        }
+
+        // Construire la réponse
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(file.getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getFilename() + "\"")
+                .body(file.getData());
     }
 }

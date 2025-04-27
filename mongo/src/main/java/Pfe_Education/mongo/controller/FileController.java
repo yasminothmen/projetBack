@@ -40,4 +40,15 @@ public class FileController {
         }
 
     }
+
+
+    @PostMapping("/save-image-to-db")
+    public ResponseEntity<?> saveImageToDb(@RequestParam("image") MultipartFile image) {
+        return fileService.saveImageToDatabase(image);
+    }
+
+    @GetMapping("/images/{filename}")
+    public ResponseEntity<byte[]> getImagefrombd(@PathVariable String filename) {
+        return fileService.displayImageFromDatabase(filename);
+    }
 }
