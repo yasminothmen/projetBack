@@ -10,7 +10,7 @@ public interface FileService {
 
     ResponseEntity<?> uploadFile(MultipartFile fileToBeUploaded);
     ResponseEntity<?> downloadFile(String filename);
-    ResponseEntity<?> saveImageToDatabase(MultipartFile image);
+    ResponseEntity<?> saveImageToDatabase(MultipartFile image,String userId);
     ResponseEntity<byte[]> displayImageFromDatabase(String filename);
 
 }

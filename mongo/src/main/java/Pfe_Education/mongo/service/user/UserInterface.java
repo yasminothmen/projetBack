@@ -20,5 +20,9 @@ public interface UserInterface {
     Optional<UserEntity> getUserByUsername(String username);
     Teacher addTeacher(Teacher teacher);
     Optional<UserEntity> findByEmail(String email);
+    UserEntity updateProfileImageId(String userId, String imageId);
+    Optional<UserEntity> findById(String userId);
+    Optional<UserEntity> findProfileImageIdById(String userId);
 
+    Optional<UserEntity> getUserWithProfileImage(String userId);
 }

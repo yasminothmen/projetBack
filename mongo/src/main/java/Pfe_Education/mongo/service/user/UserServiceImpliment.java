@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class DefaultUserServiceImpliment implements UserInterface {
+public class UserServiceImpliment implements UserInterface {
 
     @Autowired
     private UserRepo userRepo;
@@ -106,4 +106,36 @@ public class DefaultUserServiceImpliment implements UserInterface {
         return userRepo.findByEmail(email);
     }
 
+
+
+    @Override
+    public UserEntity updateProfileImageId(String userId, String imageId) {
+        UserEntity user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setProfileImageId(imageId);
+        return userRepo.save(user);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(String userId) {
+        return userRepo.findById(userId);
+    }
+
+    @Override
+    public Optional<UserEntity> findProfileImageIdById(String userId) {
+        return Optional.empty();
+    }
+
+
+    @Override
+    public Optional<UserEntity> getUserWithProfileImage(String userId) {
+        return userRepo.findById(userId).map(user -> {
+            if (user.getProfileImageId() != null) {
+                // Vous pourriez ajouter ici la logique pour récupérer l'URL complète
+                // user.setProfileImageUrl("/api/files/get-image/" + user.getProfileImageId());
+            }
+            return user;
+        });
+    }
 }

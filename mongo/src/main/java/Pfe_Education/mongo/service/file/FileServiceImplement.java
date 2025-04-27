@@ -1,7 +1,10 @@
 package Pfe_Education.mongo.service.file;
 
 import Pfe_Education.mongo.Entities.File;
+import Pfe_Education.mongo.Entities.UserEntity;
 import Pfe_Education.mongo.repositories.FileRepository;
+import Pfe_Education.mongo.repositories.UserRepo;
+import com.google.firebase.remoteconfig.User;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +24,15 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class FileServiceImplement  implements FileService{
-    private final FileRepository fileRepository;
     @Autowired
-    public FileServiceImplement(FileRepository fileRepository) {
+    private final FileRepository fileRepository;
+
+    @Autowired
+    private UserRepo userRepo; // Assurez-vous que c'est bien injecté
+
+    public FileServiceImplement(FileRepository fileRepository,UserRepo userRepo) {
         this.fileRepository = fileRepository;
+        this.userRepo = userRepo;
     }
     private static final Logger LOGGER = LoggerFactory.getLogger(FileServiceImplement.class.getName());
     @Override
@@ -102,33 +110,60 @@ public class FileServiceImplement  implements FileService{
     }
 
     @Override
-    public ResponseEntity<?> saveImageToDatabase(MultipartFile image) {
+    public ResponseEntity<?> saveImageToDatabase(MultipartFile image, String userId) {
         try {
-            // Vérifier si l'image existe déjà
-            if (this.fileExists(image.getOriginalFilename())) {
-                return new ResponseEntity<>("Image already exists", HttpStatus.CONFLICT);
+            // 1. Vérifier que l'utilisateur existe
+            UserEntity user = userRepo.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+            // 2. Générer un nom de fichier unique avec l'ID utilisateur
+            String uniqueFilename = "profile_" + userId + "_" + System.currentTimeMillis() +
+                    (image.getOriginalFilename() != null ?
+                            "_" + image.getOriginalFilename() : "");
+
+            // 3. Supprimer l'ancienne image si elle existe
+            if (user.getProfileImageId() != null) {
+                try {
+                    fileRepository.deleteById(user.getProfileImageId());
+                    log.info("Ancienne image supprimée pour l'utilisateur {}", userId);
+                } catch (Exception e) {
+                    log.warn("Échec de la suppression de l'ancienne image", e);
+                }
             }
 
-            // Créer un nouvel objet File pour la base de données
+            // 4. Sauvegarder la nouvelle image
             File file = new File();
-            file.setFilename(image.getOriginalFilename());
+            file.setFilename(uniqueFilename);
             file.setContentType(image.getContentType());
             file.setSize(image.getSize());
-            file.setData(image.getBytes()); // Stockage des données binaires
+            file.setData(image.getBytes());
 
-            // Sauvegarder dans la base de données
             File savedFile = fileRepository.save(file);
 
-            log.info("Image sauvegardée en base de données avec le nom: {}", savedFile.getFilename());
+            // 5. Mettre à jour l'utilisateur avec la référence de la nouvelle image
+            user.setProfileImageId(savedFile.getId());
+            userRepo.save(user);
 
-            return new ResponseEntity<>("Image saved to database with name: " + savedFile.getFilename(),
-                    HttpStatus.CREATED);
+            log.info("Image de profil sauvegardée pour l'utilisateur {}", userId);
+
+            // 6. Retourner la réponse avec l'URL d'accès à l'image
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Map.of(
+                            "message", "Image de profil enregistrée avec succès",
+                            "imageId", savedFile.getId(),
+                            "filename", uniqueFilename,
+                            "imageUrl", "/file/images/" + uniqueFilename
+                    ));
+
         } catch (IOException e) {
-            log.error("Erreur lors de la sauvegarde de l'image en base de données", e);
-            return new ResponseEntity<>("Error saving image to database",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Erreur lors de l'enregistrement de l'image", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur lors de l'enregistrement de l'image: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("Erreur inattendue", e);
+            return ResponseEntity.badRequest()
+                    .body("Erreur: " + e.getMessage());
         }
-
     }
 
     @Override

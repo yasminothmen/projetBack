@@ -30,5 +30,7 @@ public class UserEntity {
     private String username;
 
     private String role; // Ajout du champ rôle (student, teacher, admin)
+    private String profileImageId; // Référence à l'image de son profile
+
 
 }

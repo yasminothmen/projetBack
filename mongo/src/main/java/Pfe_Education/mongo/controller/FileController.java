@@ -43,8 +43,8 @@ public class FileController {
 
 
     @PostMapping("/save-image-to-db")
-    public ResponseEntity<?> saveImageToDb(@RequestParam("image") MultipartFile image) {
-        return fileService.saveImageToDatabase(image);
+    public ResponseEntity<?> saveImageToDb(@RequestParam("image") MultipartFile image,@RequestParam("userId") String userId) {
+        return fileService.saveImageToDatabase(image, userId);
     }
 
     @GetMapping("/images/{filename}")

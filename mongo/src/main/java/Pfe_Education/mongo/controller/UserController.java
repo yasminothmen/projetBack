@@ -1,11 +1,16 @@
 package Pfe_Education.mongo.controller;
 
+import Pfe_Education.mongo.Entities.File;
 import Pfe_Education.mongo.Entities.Teacher;
 import Pfe_Education.mongo.Entities.UserEntity;
+import Pfe_Education.mongo.repositories.FileRepository;
+import Pfe_Education.mongo.service.file.FileService;
 import Pfe_Education.mongo.service.user.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +21,11 @@ public class UserController {
 
     @Autowired
     private UserInterface userService; // Injection correcte du service
+    @Autowired
+    private FileService fileService; // Pour gérer les opérations sur les fichiers
 
+    @Autowired
+    private FileRepository fileRepository;
     // Ajouter un User
     @PostMapping
     public UserEntity addUser(@RequestBody UserEntity user) {
@@ -116,6 +125,28 @@ public class UserController {
         // Sauvegarde de l'enseignant avec le rôle défini
         return userService.addTeacher(teacher);
     }
+    // Mettre à jour l'image de profil d'un utilisateur
+    @PutMapping("/{userId}/profile-image")
+    public ResponseEntity<?> updateProfileImageId(
+            @PathVariable String userId,
+            @RequestParam("image") MultipartFile image) {
 
-
+        // Vous aurez besoin d'injecter FileService
+        return fileService.saveImageToDatabase(image, userId);
+    }
+    @GetMapping("/{userId}/profile-image")
+    public ResponseEntity<?> getProfileImage(@PathVariable String userId) {
+        return userService.findById(userId)
+                .map(user -> {
+                    if (user.getProfileImageId() == null) {
+                        return ResponseEntity.notFound().build();
+                    }
+                    File file = fileRepository.findById(user.getProfileImageId())
+                            .orElseThrow(() -> new RuntimeException("Image non trouvée"));
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.parseMediaType(file.getContentType()))
+                            .body(file.getData());
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

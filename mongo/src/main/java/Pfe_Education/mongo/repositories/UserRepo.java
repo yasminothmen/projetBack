@@ -18,9 +18,8 @@ public interface UserRepo extends MongoRepository<UserEntity, String> {
 
     // Trouve un UserEntity par son username
     Optional<UserEntity> findByUsername(String username);
-
+    Optional<UserEntity> findProfileImageIdById(String userId);
     Optional<UserEntity> findByEmail(String email);
-
 
     // Requête MongoDB pour trouver un utilisateur par username
     @Query("{ 'username' : ?0 }")
@@ -31,5 +30,8 @@ public interface UserRepo extends MongoRepository<UserEntity, String> {
     boolean existsByUsernameJPQL(String username);
 
     long countByRole(String student);
+
+    @Query("{ '_id' : ?0 }")
+    void updateProfileImageId(String userId, String imageId);
 
 }
