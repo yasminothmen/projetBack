@@ -134,9 +134,9 @@ public class UserController {
         // Vous aurez besoin d'injecter FileService
         return fileService.saveImageToDatabase(image, userId);
     }
-    @GetMapping("/{userId}/profile-image")
-    public ResponseEntity<?> getProfileImage(@PathVariable String userId) {
-        return userService.findById(userId)
+    @GetMapping("/{email}/profile-image")
+    public ResponseEntity<?> getProfileImage(@PathVariable String email) {
+        return userService.findByEmail(email)
                 .map(user -> {
                     if (user.getProfileImageId() == null) {
                         return ResponseEntity.notFound().build();

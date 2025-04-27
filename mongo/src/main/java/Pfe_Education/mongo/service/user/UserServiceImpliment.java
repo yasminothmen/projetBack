@@ -129,8 +129,8 @@ public class UserServiceImpliment implements UserInterface {
 
 
     @Override
-    public Optional<UserEntity> getUserWithProfileImage(String userId) {
-        return userRepo.findById(userId).map(user -> {
+    public Optional<UserEntity> getUserWithProfileImage(String email) {
+        return userRepo.findById(email).map(user -> {
             if (user.getProfileImageId() != null) {
                 // Vous pourriez ajouter ici la logique pour récupérer l'URL complète
                 // user.setProfileImageUrl("/api/files/get-image/" + user.getProfileImageId());

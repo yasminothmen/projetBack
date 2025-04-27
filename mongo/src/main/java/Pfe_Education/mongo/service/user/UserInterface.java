@@ -24,5 +24,5 @@ public interface UserInterface {
     Optional<UserEntity> findById(String userId);
     Optional<UserEntity> findProfileImageIdById(String userId);
 
-    Optional<UserEntity> getUserWithProfileImage(String userId);
+    Optional<UserEntity> getUserWithProfileImage(String email);
 }
