@@ -9,12 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ChatMessage {
-
     private String content;
     private String sender;
+    private String reciever;
     private String chatRoomId;
     private MessageType type;
-
-
 
 }

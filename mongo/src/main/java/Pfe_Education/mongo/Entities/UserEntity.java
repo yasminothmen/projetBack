@@ -20,17 +20,13 @@ public class UserEntity {
     @NotNull
     @Email(message = "Email invalide")
     private String email;
-
     @NotNull
     private String password;
-
     private String confirmPassword;
-
     @NotNull
     private String username;
-
-    private String role; // Ajout du champ rôle (student, teacher, admin)
-    private String profileImageId; // Référence à l'image de son profile
+    private String role;
+    private String profileImageId;
 
 
 }

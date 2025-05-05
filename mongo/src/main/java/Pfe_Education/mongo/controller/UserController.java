@@ -16,13 +16,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user") // Utilisation de "user" pour l'API des utilisateurs
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
-    private UserInterface userService; // Injection correcte du service
-    @Autowired
-    private FileService fileService; // Pour gérer les opérations sur les fichiers
+    private UserInterface userService;
+    private FileService fileService;
 
     @Autowired
     private FileRepository fileRepository;

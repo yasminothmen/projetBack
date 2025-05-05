@@ -78,7 +78,7 @@ public class FileServiceImplement  implements FileService{
 
                 File savedFile = this.fileRepository.save(file);
                 // Génére l'URL de téléchargement
-                String fileUrl = "http://192.168.1.12:8080/file/download/" + savedFile.getFilename();
+                String fileUrl = "http://192.168.155.117:8080/file/download/" + savedFile.getFilename();
 
 // Renvoie un JSON contenant l'URL
                 Map<String, String> response = new HashMap<>();

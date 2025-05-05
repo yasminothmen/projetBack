@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 public class MessageEntity {
     @Id
     private String id;
-
     private String senderId;
     private LocalDateTime date;
     private String chatroomId;
-
-
+    private String recieverId;
+    private String content;
 }

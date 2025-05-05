@@ -1,11 +1,11 @@
 package Pfe_Education.mongo.controller;
 
 import Pfe_Education.mongo.Entities.ChatMessage;
-import Pfe_Education.mongo.Entities.ChatRoomEntity;
+import Pfe_Education.mongo.Entities.Conversation;
 import Pfe_Education.mongo.Entities.MessageEntity;
 import Pfe_Education.mongo.Entities.MessageText;
 import Pfe_Education.mongo.Entities.UserEntity;
-import Pfe_Education.mongo.service.chatRomm.ChatRoomService;
+import Pfe_Education.mongo.service.Conversation.ConversationService;
 import Pfe_Education.mongo.service.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -28,7 +28,7 @@ public class ChatController {
     @Autowired
     private MessageService messageService;
     @Autowired
-    private ChatRoomService chatRoomService;
+    private ConversationService conversationService;
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(ChatMessage chatMessage) {
@@ -47,7 +47,7 @@ public class ChatController {
         message = messageService.addMessage(message);
 
         // Récupérer le chatroom et envoyer des notifications aux membres
-        ChatRoomEntity chatRoom = chatRoomService.getChatRoomById(chatMessage.getChatRoomId());
+        Conversation chatRoom = conversationService.getChatRoomById(chatMessage.getChatRoomId());
         if (chatRoom != null) {
             for (UserEntity user : chatRoom.getMembers()) {
                 // Envoyer le message à l'utilisateur via WebSocket

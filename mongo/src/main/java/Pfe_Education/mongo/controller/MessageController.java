@@ -46,4 +46,17 @@ public class MessageController {
         messageService.deleteMessage(id);
         return ResponseEntity.noContent().build();  // Retourner un code de succès 204 (pas de contenu)
     }
+
+
+    @GetMapping("/chatroom/{chatroomId}")
+    public List<MessageEntity> getChatRoomHistory(@PathVariable String chatroomId) {
+        return messageService.getChatRoomHistory(chatroomId);
+    }
+    @GetMapping("/direct/{user1Id}/{user2Id}")
+    public List<MessageEntity> getDirectMessagesHistory(
+            @PathVariable String user1Id,
+            @PathVariable String user2Id
+    ) {
+        return messageService.getDirectMessagesHistory(user1Id, user2Id);
+    }
 }
