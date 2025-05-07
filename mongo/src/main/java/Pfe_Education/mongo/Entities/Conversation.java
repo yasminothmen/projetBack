@@ -10,6 +10,8 @@ public class Conversation {
     @Id
     private String id;
     private String nom;
+    private UserEntity sender;
+    private UserEntity recipient;
     private List<UserEntity> members;
     private List<MessageEntity> messages;
 }

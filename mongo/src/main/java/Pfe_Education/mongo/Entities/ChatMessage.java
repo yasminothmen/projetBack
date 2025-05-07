@@ -13,6 +13,6 @@ public class ChatMessage {
     private String sender;
     private String reciever;
     private String chatRoomId;
-    private MessageType type;
+    private WebsocketType type;
 
 }

@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class UserEntity {
@@ -27,6 +31,7 @@ public class UserEntity {
     private String username;
     private String role;
     private String profileImageId;
-
+    @DBRef
+    private List<Cour> favoriteCourses = new ArrayList<>();
 
 }

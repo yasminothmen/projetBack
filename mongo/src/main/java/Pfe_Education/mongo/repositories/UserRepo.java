@@ -34,4 +34,7 @@ public interface UserRepo extends MongoRepository<UserEntity, String> {
     @Query("{ '_id' : ?0 }")
     void updateProfileImageId(String userId, String imageId);
 
+
+    @Query("{ '_id' : ?0 }, { 'favoriteCourses' : 1 }")
+    Optional<UserEntity> findUserWithFavorites(String email);
 }

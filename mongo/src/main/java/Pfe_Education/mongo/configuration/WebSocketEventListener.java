@@ -1,7 +1,7 @@
 package Pfe_Education.mongo.configuration;
 
 import Pfe_Education.mongo.Entities.ChatMessage;
-import Pfe_Education.mongo.Entities.MessageType;
+import Pfe_Education.mongo.Entities.WebsocketType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -24,7 +24,7 @@ public class WebSocketEventListener {
         if (username != null) {
             log.info("user disconnected: {}", username);
             var chatMessage = ChatMessage.builder()
-                    .type(MessageType.LEAVE)
+                    .type(WebsocketType.LEAVE)
                     .sender(username)
                     .build();
             messagingTemplate.convertAndSend("/topic/public", chatMessage);

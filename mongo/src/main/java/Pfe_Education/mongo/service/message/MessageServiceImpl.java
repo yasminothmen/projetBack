@@ -30,16 +30,5 @@ public class MessageServiceImpl implements MessageService {
         messageRepository.deleteById(id);
     }
 
-    @Override
-    public List<MessageEntity> getChatRoomHistory(String chatroomId) {
-        return messageRepository.findByChatroomId(chatroomId)
-                .stream()
-                .sorted(Comparator.comparing(MessageEntity::getDate))
-                .collect(Collectors.toList());    }
-    @Override
-    public List<MessageEntity> getDirectMessagesHistory(String user1Id, String user2Id) {
-        return messageRepository.findDirectMessages(user1Id, user2Id)
-                .stream()
-                .sorted(Comparator.comparing(MessageEntity::getDate))
-                .collect(Collectors.toList());    }
+
 }
