@@ -11,7 +11,7 @@ import lombok.*;
 public class ChatMessage {
     private String content;
     private String sender;
-    private String reciever;
+    private String receiver;
     private String chatRoomId;
     private WebsocketType type;
 

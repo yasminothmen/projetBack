@@ -10,6 +10,12 @@ public interface ConversationService {
     List<Conversation> getAllChatRooms();
     Conversation getChatRoomById(String id);
     void deleteChatRoom(String id);
+
     List<MessageEntity> getMessagesByChatRoomId(String chatRoomId);
+
+    Conversation getChatRoomByMembersOrCreate(String senderId, String receiverId);
+    List<Conversation> getChatRoomsByUserId(String userId);
+    Conversation addMessageToConversation(String conversationId, MessageEntity message);
+
 
 }

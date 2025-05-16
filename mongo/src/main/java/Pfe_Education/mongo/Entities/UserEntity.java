@@ -18,7 +18,7 @@ public class UserEntity {
 
     @Size(max = 10, message = "Le prénom ne doit pas dépasser 10 caractères")
     private String firstname;
-
+    private String firebaseUid;
     private String lastname;
 
     @NotNull

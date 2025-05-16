@@ -37,4 +37,7 @@ public interface UserRepo extends MongoRepository<UserEntity, String> {
 
     @Query("{ '_id' : ?0 }, { 'favoriteCourses' : 1 }")
     Optional<UserEntity> findUserWithFavorites(String email);
+
+    Optional<UserEntity> findByFirebaseUid(String firebaseUid);
+
 }

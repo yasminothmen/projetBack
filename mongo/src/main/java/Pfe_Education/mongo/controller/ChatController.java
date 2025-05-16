@@ -32,36 +32,44 @@ public class ChatController {
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(ChatMessage chatMessage) {
-        // 1. Log immédiat pour confirmer la réception
         System.out.println("📩 [BACKEND] Message reçu - " +
                 "Expéditeur: " + chatMessage.getSender() + " | " +
-                "Contenu: '" + chatMessage.getContent() + "' | " +
-                "ChatRoom ID: " + chatMessage.getChatRoomId()
-        );
-        // Créer et enregistrer le message en base de données
-        MessageEntity message= new MessageText();
+                "Contenu: '" + chatMessage.getContent() + "'");
+
+        // Créer le message
+        MessageEntity message = new MessageText();
         message.setChatroomId(chatMessage.getChatRoomId());
         message.setDate(LocalDateTime.now());
         message.setSenderId(chatMessage.getSender());
         ((MessageText) message).setText(chatMessage.getContent());
+
+        // Sauvegarder dans la collection MessageEntity
         message = messageService.addMessage(message);
 
-        // Récupérer le chatroom et envoyer des notifications aux membres
+        // ✅ Ajouter aussi le message dans la conversation correspondante
+        try {
+            conversationService.addMessageToConversation(chatMessage.getChatRoomId(), message);
+         System.out.println("✅ Message ajouté à la conversation.");
+        } catch (Exception e) {
+            System.err.println("❌ Erreur lors de l'ajout du message à la conversation : ");
+            e.printStackTrace();
+        }
+
+        // Récupérer la chatroom pour envoyer le message aux membres
         Conversation chatRoom = conversationService.getChatRoomById(chatMessage.getChatRoomId());
+
         if (chatRoom != null) {
             for (UserEntity user : chatRoom.getMembers()) {
-                // Envoyer le message à l'utilisateur via WebSocket
                 messagingTemplate.convertAndSend("/topic/messages/%s".formatted(user.getId()), message);
 
-                // Envoyer une notification en temps réel à l'utilisateur
-                String notificationMessage = "Nouveau message de " + chatMessage.getSender() + ": " + chatMessage.getContent();
-                messagingTemplate.convertAndSend("/topic/notifications/%s".formatted(user.getId()), notificationMessage);
+                String notification = "Nouveau message de " + chatMessage.getSender() + ": " + chatMessage.getContent();
+                messagingTemplate.convertAndSend("/topic/notifications/%s".formatted(user.getId()), notification);
 
-                // Log pour débogage
-                System.out.println("📣 Notification envoyée à l'utilisateur " + user.getId() + ": " + notificationMessage);
+                System.out.println("📣 Notification envoyée à l'utilisateur " + user.getId() + ": " + notification);
             }
         }
     }
+
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")

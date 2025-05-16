@@ -47,8 +47,29 @@ public class ConversationController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @GetMapping("/{chatRoomId}/messages")
     public ResponseEntity<List<MessageEntity>> getMessages(@PathVariable String chatRoomId) {
         return ResponseEntity.ok(conversationService.getMessagesByChatRoomId(chatRoomId));
     }
+    @GetMapping("/between/{senderId}/{receiverId}")
+    public ResponseEntity<Conversation> getOrCreateChatRoom(
+            @PathVariable String senderId,
+            @PathVariable String receiverId) {
+        Conversation chatRoom = conversationService.getChatRoomByMembersOrCreate(senderId, receiverId);
+        return ResponseEntity.ok(chatRoom);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Conversation> getChatRoomsByUserId(@PathVariable String userId) {
+        return conversationService.getChatRoomsByUserId(userId);
+    }
+
+    @PutMapping("/{conversationId}/messages")
+    public ResponseEntity<Conversation> addMessage(
+            @PathVariable String conversationId,
+            @RequestBody MessageEntity message) {
+        return ResponseEntity.ok(conversationService.addMessageToConversation(conversationId, message));
+    }
+
 }
